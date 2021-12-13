@@ -1,0 +1,78 @@
+{
+  "name": "@twuni/ui",
+  "description": "A lightweight, modern UI library built for Preact apps.",
+  "version": "0.0.1",
+  "homepage": "https://ui.twuni.dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twuni/ui"
+  },
+  "author": {
+    "email": "devin@canterberry.cc",
+    "name": "Devin Canterberry"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.16.0",
+    "@babel/core": "7.16.0",
+    "@babel/preset-env": "7.16.4",
+    "c8": "7.10.0",
+    "chai": "4.3.4",
+    "eslint": "8.4.1",
+    "eslint-plugin-ante": "1.1.0",
+    "marked": "4.0.7",
+    "mocha": "9.1.3",
+    "pak-cli": "^0.0.5"
+  },
+  "scripts": {
+    "build": "pak-cli build",
+    "docs": "pak-cli docs",
+    "lint": "pak-cli lint",
+    "test": "pak-cli test",
+    "test:coverage": "pak-cli test:coverage"
+  },
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.mjs",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.mjs",
+      "require": "./lib/cjs/index.js"
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": "> 0.25%, not dead"
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:ante/recommended",
+      "plugin:ante/style"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "eslint-plugin-ante"
+    ]
+  },
+  "dependencies": {
+    "es-module-shims": "1.3.6",
+    "htm": "3.1.0",
+    "preact": "10.6.4",
+    "router-preact": "0.2.2",
+    "stylish-preact": "0.2.0"
+  }
+}
