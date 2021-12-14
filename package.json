@@ -25,7 +25,7 @@
     "pak-cli": "^0.0.5"
   },
   "scripts": {
-    "build": "pak-cli build",
+    "build": "scripts/build",
     "docs": "pak-cli docs",
     "lint": "pak-cli lint",
     "test": "pak-cli test",
