@@ -63,6 +63,18 @@ const Frame = stylish('button', [
       pointer-events: none;
     `,
     states: [':disabled']
+  },
+  {
+    rule: 'background-color: rgba(0, 0, 0, 0.05)',
+    states: [':active > span', ':focus > span', ':hover > span']
+  },
+  {
+    rule: 'background-color: rgba(0, 0, 0, 0.1)',
+    states: [':active:focus > span', ':active:hover > span', ':focus:hover > span']
+  },
+  {
+    rule: 'background-color: rgba(0, 0, 0, 0.15)',
+    states: [':active:focus:hover > span']
   }
 ]);
 
@@ -81,19 +93,7 @@ const Shadow = stylish('span', [
     text-overflow: ellipsis;
     white-space: nowrap;
     ${theme.transition('background-color')}
-  `,
-  {
-    rule: 'background-color: rgba(0, 0, 0, 0.05)',
-    states: [':active', ':focus', ':hover']
-  },
-  {
-    rule: 'background-color: rgba(0, 0, 0, 0.1)',
-    states: [':active:focus', ':active:hover', ':focus:hover']
-  },
-  {
-    rule: 'background-color: rgba(0, 0, 0, 0.15)',
-    states: [':active:focus:hover']
-  }
+  `
 ]);
 
 export const Button = (props) => {
