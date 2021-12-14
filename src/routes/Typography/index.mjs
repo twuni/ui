@@ -11,19 +11,17 @@ import { useState } from 'preact/hooks';
 
 const viewSource = (kind) => `<Typography kind=${JSON.stringify(kind)}>...</Typography>`;
 
-export const TypographyRoute = ({}) => {
-  const [source, setSource] = useState('<Typography>...</Typography>');
-
-  return html`
-    <${Code} block snippet=${source}/>
-    <${Scrollable}>
-      ${kindsOfTypography.map((kind) => html`
-        <${Specimen} name=${kind} onClick=${() => setSource(viewSource(kind))}>
+export const TypographyRoute = () => html`
+  <${Scrollable}>
+    ${kindsOfTypography.map((kind) => html`
+      <${Specimen} name=${kind}>
+        <${Grid} columns=2>
           <${Typography} kind=${kind}>The quick brown fox jumped over the lazy dog.<//>
+          <${Code} block snippet=${viewSource(kind)}/>
         <//>
-      `)}
-    <//>
-  `;
-};
+      <//>
+    `)}
+  <//>
+`;
 
 export default TypographyRoute;

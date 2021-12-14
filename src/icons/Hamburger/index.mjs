@@ -9,14 +9,12 @@ const Vector = stylish('svg', `
   width: 1em;
 `);
 
-export const HamburgerIcon = (props) => {
-  return html`
-    <${Vector} viewBox="0 0 56 56" ...${props}>
-      <rect height=8 width=56 x=0 y=8/>
-      <rect height=8 width=56 x=0 y=24/>
-      <rect height=8 width=56 x=0 y=40/>
-    <//>
-  `;
-};
+export const HamburgerIcon = (props) => html`
+  <${Vector} viewBox="0 0 56 56" ...${props}>
+    <rect height=8 width=56 x=0 y=8/>
+    <rect height=8 width=56 x=0 y=24/>
+    <rect height=8 width=56 x=0 y=40/>
+  <//>
+`;
 
 export default HamburgerIcon;

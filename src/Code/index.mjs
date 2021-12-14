@@ -3,6 +3,7 @@ import stylish from 'stylish-preact';
 
 const Snippet = stylish('code', ({ block, theme }) => `
   ${block ? `
+    background-color: rgba(255, 255, 255, 0.05);
     display: block;
     padding: ${theme.spacing()};
   ` : `

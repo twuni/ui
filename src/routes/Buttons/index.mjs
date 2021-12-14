@@ -10,22 +10,17 @@ import { useState } from 'preact/hooks';
 
 const viewSource = (kind) => `<Button kind=${JSON.stringify(kind)}>...</Button>`;
 
-export const ButtonsRoute = ({}) => {
-  const [source, setSource] = useState(`<Button>...</Button>`);
-
-  return html`
-    <${Code} block snippet=${source}/>
-    <${Scrollable}>
-      ${kindsOfButtons.map((kind) => html`
-        <${Specimen} name=${kind} onClick=${() => setSource(viewSource(kind))}>
-          <${Grid} columns=2>
-            <${Button} kind=${kind}>Enabled<//>
-            <${Button} disabled kind=${kind}>Disabled<//>
-          <//>
+export const ButtonsRoute = () => html`
+  <${Scrollable}>
+    ${kindsOfButtons.map((kind) => html`
+      <${Specimen} name=${kind}>
+        <${Grid} columns=2>
+          <${Button} kind=${kind}>${kind}<//>
+          <${Code} block snippet=${viewSource(kind)}/>
         <//>
-      `)}
-    <//>
-  `;
-};
+      <//>
+    `)}
+  <//>
+`;
 
 export default ButtonsRoute;
