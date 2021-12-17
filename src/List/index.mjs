@@ -7,7 +7,7 @@ import average from './average/index.mjs';
 import { createRef } from 'preact';
 import { html } from 'htm/preact';
 
-const FPS = 1;
+const FPS = 60;
 const RENDER_TICK_INTERVAL = 1000 / FPS;
 
 const DEFAULT_STATE = Object.freeze({
@@ -103,7 +103,7 @@ const createDebouncer = (delay) => {
   };
 };
 
-const debounce = createDebouncer(50);
+const debounce = createDebouncer(RENDER_TICK_INTERVAL);
 
 export const List = ({ count = 0, renderItem, ...otherProps }) => {
   const viewportRef = createRef();
