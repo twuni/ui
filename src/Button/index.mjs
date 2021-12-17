@@ -38,7 +38,7 @@ const Frame = stylish('button', [
   ({ kind = 'primary', theme }) => `
     align-items: stretch;
     background: none;
-    border-radius: ${theme.spacing(0.5)};
+    border-radius: ${theme.spacing.sm};
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
@@ -86,10 +86,10 @@ const Shadow = stylish('span', [
     flex: 1;
     flex-direction: row;
     justify-content: center;
-    line-height: ${theme.spacing(6)};
+    line-height: ${theme.spacing.touch};
     margin: 0;
     overflow: hidden;
-    padding: 0 ${theme.spacing()};
+    padding: 0 ${theme.spacing.md};
     text-overflow: ellipsis;
     white-space: nowrap;
     ${theme.transition('background-color')}
@@ -97,7 +97,7 @@ const Shadow = stylish('span', [
 ]);
 
 export const Button = (props) => {
-  const childProps = { ... props };
+  const childProps = { ...props };
 
   delete childProps.children;
 

@@ -1,16 +1,24 @@
+export const GRID = 8;
+
+export const spacing = (multiplier = 1) => `${multiplier * GRID}px`;
+
 export const Theme = Object.freeze({
   breakpoints: {
+    /* eslint-disable sort-keys */
     xs: '(max-width: 599px)',
     sm: '(min-width: 600px) and (max-width: 899px)',
     md: '(min-width: 900px) and (max-width: 1199px)',
     lg: '(min-width: 1200px) and (max-width: 1535px)',
     xl: '(min-width: 1536px)'
+    /* eslint-enable sort-keys */
   },
   elevation: {
+    /* eslint-disable sort-keys */
     low: '1',
     high: '2',
     higher: '3',
     highest: '4'
+    /* eslint-enable sort-keys */
   },
   palette: {
     error: '#c13',
@@ -33,7 +41,17 @@ export const Theme = Object.freeze({
     soft: '2px 2px 2px rgba(0, 0, 0, 0.25)',
     subtle: '1px 1px 1px rgba(0, 0, 0, 0.25)'
   },
-  spacing: (multiplier = 1) => `${multiplier * 8}px`,
+  spacing: Object.assign(spacing, {
+    /* eslint-disable no-magic-numbers, sort-keys */
+    xs: spacing(0.25),
+    sm: spacing(0.5),
+    md: spacing(1),
+    lg: spacing(2),
+    xl: spacing(4),
+    xxl: spacing(8),
+    touch: spacing(6)
+    /* eslint-enable no-magic-numbers, sort-keys */
+  }),
   transition: (...properties) => `
     transition-duration: 100ms;
     transition-property: ${properties.join(', ')};
@@ -54,7 +72,7 @@ export const Theme = Object.freeze({
     overline: 'font: 400 10px sans-serif; text-transform: uppercase;',
     subtitle1: 'font: 700 16px sans-serif;',
     subtitle2: 'font: 400 14px sans-serif;'
-  },
+  }
 });
 
 export default Theme;

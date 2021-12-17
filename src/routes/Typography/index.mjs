@@ -6,8 +6,6 @@ import Scrollable from '../../Scrollable/index.mjs';
 import Specimen from '../../Specimen/index.mjs';
 
 import { html } from 'htm/preact';
-import stylish from 'stylish-preact';
-import { useState } from 'preact/hooks';
 
 const viewSource = (kind) => `<Typography kind=${JSON.stringify(kind)}>...</Typography>`;
 

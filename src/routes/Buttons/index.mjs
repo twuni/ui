@@ -6,7 +6,6 @@ import Scrollable from '../../Scrollable/index.mjs';
 import Specimen from '../../Specimen/index.mjs';
 
 import { html } from 'htm/preact';
-import { useState } from 'preact/hooks';
 
 const viewSource = (kind) => `<Button kind=${JSON.stringify(kind)}>...</Button>`;
 

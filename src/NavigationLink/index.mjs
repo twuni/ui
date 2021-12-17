@@ -4,30 +4,37 @@ import { html } from 'htm/preact';
 import stylish from 'stylish-preact';
 import { useState } from 'preact/hooks';
 
+const onlyWhenInactive = (rule) => ({ isActive }) => {
+  if (isActive) {
+    return '';
+  }
+  return rule;
+};
+
 const StylishLink = stylish(Link, [
   ({ isActive, theme }) => `
     display: inline-block;
-    line-height: ${theme.spacing(8)};
-    padding: 0 ${theme.spacing(2)};
+    line-height: ${theme.spacing.xxl};
+    padding: 0 ${theme.spacing.lg};
     pointer-events: ${isActive ? 'none' : 'auto'};
     text-decoration: none;
     ${theme.transition('background-color', 'color')}
   `,
   {
-    rule: ({ isActive }) => isActive ? '' : 'background-color: rgba(0, 0, 0, 0.05)',
+    rule: onlyWhenInactive('background-color: rgba(0, 0, 0, 0.05)'),
     states: [':active', ':focus', ':hover']
   },
   {
-    rule: ({ isActive }) => isActive ? '' : 'background-color: rgba(0, 0, 0, 0.1)',
+    rule: onlyWhenInactive('background-color: rgba(0, 0, 0, 0.1)'),
     states: [':active:focus', ':active:hover', ':focus:hover']
   },
   {
-    rule: ({ isActive }) => isActive ? '' : 'background-color: rgba(0, 0, 0, 0.15)',
+    rule: onlyWhenInactive('background-color: rgba(0, 0, 0, 0.15)'),
     states: [':active:focus:hover']
   },
   {
     media: '(prefers-color-scheme: light)',
-    rule: ({ isActive, theme }) => `
+    rule: ({ isActive }) => `
       ${isActive ? `
         background-color: rgba(0, 0, 0, 0.25);
         color: inherit;

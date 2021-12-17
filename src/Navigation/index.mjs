@@ -5,7 +5,7 @@ export const Navigation = stylish('nav', [
     align-items: stretch;
     display: flex;
     flex-direction: row;
-    margin-bottom: ${theme.spacing()};
+    margin-bottom: ${theme.spacing.md};
     overflow-x: auto;
     overflow-y: hidden;
   `,

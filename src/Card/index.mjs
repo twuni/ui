@@ -3,7 +3,7 @@ import stylish from 'stylish-preact';
 export const Card = stylish('div', [
   ({ theme }) => `
     border-color: rgba(0, 0, 0, 0.1);
-    border-radius: ${theme.spacing(0.5)};
+    border-radius: ${theme.spacing.sm};
     border-style: solid;
     border-width: 1px;
     box-shadow: ${theme.shadow.soft};

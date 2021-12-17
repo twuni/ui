@@ -3,7 +3,7 @@ import { html } from 'htm/preact';
 import stylish from 'stylish-preact';
 import { useEffect } from 'preact/hooks';
 
-const StylishRow = stylish('li', ({ theme }) => `
+const StylishItem = stylish('li', `
   align-items: stretch;
   border-color: rgba(0, 0, 0, 0.1);
   border-style: solid;
@@ -18,10 +18,7 @@ const StylishRow = stylish('li', ({ theme }) => `
   padding: 0;
 `);
 
-const FPS = 10;
-const RENDER_TICK_INTERVAL = 1000 / FPS;
-
-export const Row = ({ children, onMeasure, ...otherProps }) => {
+export const Item = ({ children, onMeasure, ...otherProps }) => {
   const viewportRef = createRef();
 
   useEffect(() => {
@@ -33,10 +30,10 @@ export const Row = ({ children, onMeasure, ...otherProps }) => {
   }, [viewportRef?.current?.base, onMeasure]);
 
   return html`
-    <${StylishRow} ref=${viewportRef} ...${otherProps}>
+    <${StylishItem} ...${otherProps} ref=${viewportRef}>
       ${children}
     <//>
   `;
 };
 
-export default Row;
+export default Item;

@@ -1,9 +1,8 @@
 import stylish from 'stylish-preact';
 
-export const Viewport = stylish('ol', `
+export const Viewport = stylish('section', `
   flex: 1;
   display: block;
-  list-style: none;
   margin: 0;
   overflow-x: hidden;
   overflow-y: auto;

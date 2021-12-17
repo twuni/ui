@@ -1,109 +1,16 @@
-import { useEffect, useReducer, useState } from 'preact/hooks';
+import { useEffect, useReducer } from 'preact/hooks';
 
-import Row from './Row/index.mjs';
-import Spacer from './Spacer/index.mjs';
+import DEFAULT_STATE from './DEFAULT_STATE/index.mjs';
+import Item from './Item/index.mjs';
+import Items from './Items/index.mjs';
 import Viewport from './Viewport/index.mjs';
-import average from './average/index.mjs';
+import createDebouncer from './createDebouncer/index.mjs';
 import { createRef } from 'preact';
 import { html } from 'htm/preact';
+import reduce from './reduce/index.mjs';
 
-const FPS = 60;
-const RENDER_TICK_INTERVAL = 1000 / FPS;
-
-const DEFAULT_STATE = Object.freeze({
-  averageItemHeight: 35,
-  count: 0,
-  itemHeights: [],
-  view: {
-    items: {
-      end: 0,
-      start: 0
-    },
-    post: 0,
-    pre: 0
-  },
-  viewport: {
-    end: 0,
-    start: 0
-  }
-});
-
-const withComputedView = (state) => {
-  if (state.count < 1 || state.viewport.start === state.viewport.end) {
-    state.view = DEFAULT_STATE.view;
-    return state;
-  }
-
-  state.view = { items: { end: 0, start: 0 }, post: 0, pre: 0 };
-
-  let itemStart = 0;
-
-  for (let index = 0; index < state.count; index++) {
-    const itemHeight = (state.itemHeights[index] ?? state.averageItemHeight);
-    const itemEnd = itemStart + itemHeight;
-
-    if (itemEnd <= state.viewport.start) {
-      state.view.pre += itemHeight;
-      state.view.items.start += 1;
-    } else if (itemStart <= state.viewport.start && itemEnd >= state.viewport.end) {
-      state.view.items.start += 1;
-    }
-
-    if (itemStart < state.viewport.end) {
-      state.view.items.end += 1;
-    } else {
-      state.view.post += itemHeight;
-    }
-
-    itemStart = itemEnd;
-  }
-
-  return state;
-};
-
-const reduce = (state = DEFAULT_STATE, { payload, type }) => {
-  switch (type) {
-    case 'RECOUNT':
-      if (state.count !== payload.count) {
-        return withComputedView({ ...state, count: payload.count });
-      }
-      break;
-    case 'MEASURE_ITEM':
-      if (state.itemHeights[payload.index] !== payload.height) {
-        const itemHeights = [...state.itemHeights];
-
-        itemHeights[payload.index] = payload.height;
-
-        const averageItemHeight = average(itemHeights);
-
-        return withComputedView({ ...state, averageItemHeight, itemHeights });
-      }
-      break;
-    case 'MEASURE_VIEWPORT':
-      if (payload.end !== state.viewport.end || payload.start !== state.viewport.start) {
-        return withComputedView({ ...state, viewport: { end: payload.end, start: payload.start } });
-      }
-      break;
-  }
-
-  return state;
-};
-
-const createDebouncer = (delay) => {
-  const state = {};
-  return (f) => () => {
-    if (state.pending) {
-      clearTimeout(state.pending);
-    }
-
-    state.pending = setTimeout(() => {
-      delete state.pending;
-      f();
-    }, delay);
-  };
-};
-
-const debounce = createDebouncer(RENDER_TICK_INTERVAL);
+// eslint-disable-next-line no-magic-numbers
+const debounce = createDebouncer(17);
 
 export const List = ({ count = 0, renderItem, ...otherProps }) => {
   const viewportRef = createRef();
@@ -138,6 +45,8 @@ export const List = ({ count = 0, renderItem, ...otherProps }) => {
         viewport.ownerDocument.defaultView.removeEventListener('resize', measure, false);
       };
     }
+
+    return undefined;
   }, [viewportRef?.current?.base]);
 
   const onMeasure = (index) => (height) => {
@@ -150,7 +59,7 @@ export const List = ({ count = 0, renderItem, ...otherProps }) => {
 
   for (let index = state.view.items.start; index < state.view.items.end; index++) {
     items.push(html`
-      <${Row} key=${index} onMeasure=${onMeasure(index)}>
+      <${Item} key=${index} onMeasure=${onMeasure(index)}>
         ${renderItem(index)}
       <//>
     `);
@@ -158,9 +67,9 @@ export const List = ({ count = 0, renderItem, ...otherProps }) => {
 
   return html`
     <${Viewport} ...${otherProps} ref=${viewportRef}>
-      <${Spacer} style=${`height: ${state.view.pre}px`}/>
-      ${items}
-      <${Spacer} style=${`height: ${state.view.post}px`}/>
+      <${Items} style=${`padding: ${state.view.pre}px 0 ${state.view.post}px`}>
+        ${items}
+      <//>
     <//>
   `;
 };

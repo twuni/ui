@@ -1,7 +1,9 @@
 import stylish from 'stylish-preact';
 
+const DEFAULT_SPACING = 2;
+
 export const Grid = stylish('div', [
-  ({ spacing = 2, theme }) => `
+  ({ spacing = DEFAULT_SPACING, theme }) => `
     display: grid;
     grid-gap: ${theme.spacing(spacing)};
     overflow: hidden;

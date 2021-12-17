@@ -5,11 +5,11 @@ const Figure = stylish('figure', [
   ({ onClick, theme }) => `
     background-color: rgba(0, 0, 0, 0);
     border-color: ${theme.palette.primary};
-    border-radius: ${theme.spacing(0.5)};
+    border-radius: ${theme.spacing.sm};
     border-style: solid;
     border-width: 1px;
     cursor: ${onClick ? 'pointer' : 'default'};
-    margin: ${theme.spacing()};
+    margin: ${theme.spacing.md};
     overflow: hidden;
     padding: 0;
     ${theme.transition('background-color')}
@@ -32,7 +32,7 @@ const Caption = stylish('figcaption', ({ theme }) => `
   background-color: ${theme.palette.primary};
   color: ${theme.palette.onPrimary};
   margin: 0;
-  padding: ${theme.spacing()};
+  padding: ${theme.spacing.md};
   ${theme.typography.caption}
 `);
 
