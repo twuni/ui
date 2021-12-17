@@ -60,6 +60,7 @@ export const HomeRoute = () => html`
       <${Typography} kind="body" style="opacity:0.6">High-performance list views, right out of the box. Minimal and optimized.<//>
       <${List} count=${TwinPeaksCast.length} renderItem=${(index) => html`
         <${Item}>
+          <${Cell}>${index}<//>
           <${Cell} style="flex:1">${TwinPeaksCast[index].actor}<//>
           <${Cell} style="flex:1">${TwinPeaksCast[index].character}<//>
         <//>

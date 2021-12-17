@@ -1,204 +1,166 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useReducer, useState } from 'preact/hooks';
 
-import Scrollable from '../Scrollable/index.mjs';
+import Row from './Row/index.mjs';
+import Spacer from './Spacer/index.mjs';
+import Viewport from './Viewport/index.mjs';
+import average from './average/index.mjs';
 import { createRef } from 'preact';
 import { html } from 'htm/preact';
-import stylish from 'stylish-preact';
 
-const average = (numbers) => {
-  const { count, sum } = numbers.reduce((a, b) => {
-    if (typeof b === 'number') {
-      a.sum += b;
-      a.count += 1;
+const FPS = 1;
+const RENDER_TICK_INTERVAL = 1000 / FPS;
+
+const DEFAULT_STATE = Object.freeze({
+  averageItemHeight: 35,
+  count: 0,
+  itemHeights: [],
+  view: {
+    items: {
+      end: 0,
+      start: 0
+    },
+    post: 0,
+    pre: 0
+  },
+  viewport: {
+    end: 0,
+    start: 0
+  }
+});
+
+const withComputedView = (state) => {
+  if (state.count < 1 || state.viewport.start === state.viewport.end) {
+    state.view = DEFAULT_STATE.view;
+    return state;
+  }
+
+  state.view = { items: { end: 0, start: 0 }, post: 0, pre: 0 };
+
+  let itemStart = 0;
+
+  for (let index = 0; index < state.count; index++) {
+    const itemHeight = (state.itemHeights[index] ?? state.averageItemHeight);
+    const itemEnd = itemStart + itemHeight;
+
+    if (itemEnd <= state.viewport.start) {
+      state.view.pre += itemHeight;
+      state.view.items.start += 1;
+    } else if (itemStart <= state.viewport.start && itemEnd >= state.viewport.end) {
+      state.view.items.start += 1;
     }
-    return a;
-  }, { count: 0, sum: 0 });
 
-  return sum / count;
+    if (itemStart < state.viewport.end) {
+      state.view.items.end += 1;
+    } else {
+      state.view.post += itemHeight;
+    }
+
+    itemStart = itemEnd;
+  }
+
+  return state;
 };
 
-const Viewport = stylish('ol', `
-  flex: 1;
-  display: block;
-  list-style: none;
-  margin: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0;
-`);
+const reduce = (state = DEFAULT_STATE, { payload, type }) => {
+  switch (type) {
+    case 'RECOUNT':
+      if (state.count !== payload.count) {
+        return withComputedView({ ...state, count: payload.count });
+      }
+      break;
+    case 'MEASURE_ITEM':
+      if (state.itemHeights[payload.index] !== payload.height) {
+        const itemHeights = [...state.itemHeights];
 
-const StylishRow = stylish('li', ({ theme }) => `
-  align-items: stretch;
-  border-color: rgba(0, 0, 0, 0.1);
-  border-style: solid;
-  border-width: 0 0 1px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-  margin: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0;
-`);
+        itemHeights[payload.index] = payload.height;
 
-const Spacer = stylish('li', ({ pixels, theme }) => `
-  height: ${pixels}px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`);
+        const averageItemHeight = average(itemHeights);
 
-const Row = ({ children, onMeasure, ...otherProps }) => {
+        return withComputedView({ ...state, averageItemHeight, itemHeights });
+      }
+      break;
+    case 'MEASURE_VIEWPORT':
+      if (payload.end !== state.viewport.end || payload.start !== state.viewport.start) {
+        return withComputedView({ ...state, viewport: { end: payload.end, start: payload.start } });
+      }
+      break;
+  }
+
+  return state;
+};
+
+const createDebouncer = (delay) => {
+  const state = {};
+  return (f) => () => {
+    if (state.pending) {
+      clearTimeout(state.pending);
+    }
+
+    state.pending = setTimeout(() => {
+      delete state.pending;
+      f();
+    }, delay);
+  };
+};
+
+const debounce = createDebouncer(50);
+
+export const List = ({ count = 0, renderItem, ...otherProps }) => {
   const viewportRef = createRef();
-  const [height, setHeight] = useState();
+
+  const [state, dispatch] = useReducer(reduce, DEFAULT_STATE);
+
+  useEffect(() => {
+    dispatch({ payload: { count }, type: 'RECOUNT' });
+  }, [count]);
 
   useEffect(() => {
     const viewport = viewportRef?.current?.base;
 
     if (viewport) {
-      if (viewport.clientHeight !== height) {
-        setHeight(viewport.clientHeight);
-      }
+      const measure = debounce(() => {
+        dispatch({
+          payload: {
+            end: viewport.scrollTop + viewport.clientHeight,
+            start: viewport.scrollTop
+          },
+          type: 'MEASURE_VIEWPORT'
+        });
+      });
+
+      measure();
+
+      viewport.addEventListener('scroll', measure, false);
+      viewport.ownerDocument.defaultView.addEventListener('resize', measure, false);
+
+      return () => {
+        viewport.removeEventListener('scroll', measure, false);
+        viewport.ownerDocument.defaultView.removeEventListener('resize', measure, false);
+      };
     }
-  }, [children, viewportRef?.current?.base]);
-
-  useEffect(() => {
-    if (typeof onMeasure === 'function' && typeof height !== 'undefined') {
-      onMeasure(height);
-    }
-  }, [onMeasure, height]);
-
-  return html`
-    <${StylishRow} ref=${viewportRef} ...${otherProps}>
-      ${children}
-    <//>
-  `;
-};
-
-export const List = ({ count = 0, renderItem, ...otherProps }) => {
-  const viewportRef = createRef();
-  const [averageHeight, setAverageHeight] = useState(0);
-  const [dimensions, setDimensions] = useState([]);
-  const [fold, setFold] = useState();
-  const [gutter, setGutter] = useState(0);
-  const [layout, setLayout] = useState({ above: 0, below: 0, start: 0, end: 0 });
-
-  useEffect(() => {
-    const callback = () => {
-      const nextFold = viewportRef?.current?.base?.clientHeight;
-
-      if (nextFold !== fold) {
-        setFold(nextFold);
-      }
-    };
-
-    callback();
-
-    addEventListener('resize', callback);
-
-    return () => {
-      removeEventListener('resize', callback);
-    };
-  }, [viewportRef?.current?.base?.clientHeight]);
-
-  useEffect(() => {
-    const callback = () => {
-      const nextGutter = viewportRef?.current?.base?.scrollTop;
-
-      if (nextGutter !== gutter) {
-        setGutter(nextGutter);
-      }
-    };
-
-    callback();
-
-    addEventListener('resize', callback);
-
-    return () => {
-      removeEventListener('resize', callback);
-    };
-  }, [viewportRef?.current?.base?.scrollTop]);
-
-  useEffect(() => {
-    const callback = () => {
-      const averageHeight = average(dimensions);
-      const nextLayout = { above: 0, below: 0, start: 0 };
-
-      while (nextLayout.above < gutter) {
-        const itemHeight = typeof dimensions[nextLayout.start] === 'undefined' ? averageHeight : dimensions[nextLayout.start];
-
-        if (nextLayout.above + itemHeight > gutter) {
-          break;
-        }
-
-        nextLayout.above += itemHeight;
-        nextLayout.start += 1;
-      }
-
-      nextLayout.end = nextLayout.start;
-      let visibleItemsHeight = 0;
-
-      while (visibleItemsHeight <= fold && nextLayout.end < count) {
-        const itemHeight = typeof dimensions[nextLayout.end] === 'undefined' ? averageHeight : dimensions[nextLayout.end];
-
-        visibleItemsHeight += itemHeight;
-        nextLayout.end += 1;
-      }
-
-      if (nextLayout.end >= count) {
-        nextLayout.end = count - 1;
-      }
-
-      for (let i = nextLayout.end + 1; i < count; i++) {
-        nextLayout.below += typeof dimensions[i] === 'undefined' ? averageHeight : dimensions[i];
-      }
-
-      setLayout(nextLayout);
-    };
-
-    callback();
-
-    addEventListener('resize', callback);
-
-    return () => {
-      removeEventListener('resize', callback);
-    };
-  }, [count, dimensions, gutter, fold]);
+  }, [viewportRef?.current?.base]);
 
   const onMeasure = (index) => (height) => {
-    if (dimensions[index] !== height) {
-      const nextDimensions = [ ...dimensions ];
-      nextDimensions[index] = height;
-      setDimensions(nextDimensions);
+    if (height !== state.itemHeights[index]) {
+      dispatch({ payload: { height, index }, type: 'MEASURE_ITEM' });
     }
   };
 
-  const onScroll = (event) => {
-    setGutter(event.srcElement.scrollTop);
-  };
+  const items = [];
 
-  const viewportProps = { ...otherProps };
-
-  delete viewportProps.children;
+  for (let index = state.view.items.start; index < state.view.items.end; index++) {
+    items.push(html`
+      <${Row} key=${index} onMeasure=${onMeasure(index)}>
+        ${renderItem(index)}
+      <//>
+    `);
+  }
 
   return html`
-    <${Viewport} ...${viewportProps} onScroll=${onScroll} ref=${viewportRef}>
-      <${Spacer} pixels=${layout.above}/>
-      ${(() => {
-        const items = [];
-
-        for (let i = layout.start; i <= layout.end; i++) {
-          items.push(html`
-            <${Row} onMeasure=${onMeasure(i)}>
-              ${renderItem(i)}
-            <//>
-          `);
-        }
-
-        return items;
-      })()}
-      <${Spacer} pixels=${layout.below}/>
+    <${Viewport} ...${otherProps} ref=${viewportRef}>
+      <${Spacer} style=${`height: ${state.view.pre}px`}/>
+      ${items}
+      <${Spacer} style=${`height: ${state.view.post}px`}/>
     <//>
   `;
 };
