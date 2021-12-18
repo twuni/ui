@@ -9,14 +9,22 @@ import Specimen from '../../Specimen/index.mjs';
 import { html } from 'htm/preact';
 import { useReducer } from 'preact/hooks';
 
-const viewSource = (type) => `<Input type=${JSON.stringify(type)}/>`;
+const viewInputSource = (type) => `<Input type=${JSON.stringify(type)}/>`;
+
+const viewCheckboxSource = ({ checked, indeterminate }) => {
+  if (!checked && !indeterminate) {
+    return '<Checkbox/>';
+  }
+
+  return `<Checkbox ${[checked && 'checked', indeterminate && 'indeterminate'].filter(Boolean).join(' ')}/>`;
+};
 
 const initialState = Object.freeze({
   checked: false,
   indeterminate: true
 });
 
-const reduce = (state = initialState, { payload, type }) => {
+const reduce = (state = initialState, { type }) => {
   switch (type) {
     case 'CHANGE':
       return {
@@ -43,22 +51,14 @@ export const InputsRoute = () => {
       <${Specimen} name="checkbox">
         <${Grid} columns=2>
           <${Checkbox} checked=${state.checked} indeterminate=${state.indeterminate} onChange=${onChange}/>
-          <${Code} block snippet=${`<Checkbox${[state.checked && 'checked', state.indeterminate && 'indeterminate'].reduce((a, b) => {
-            if (b) {
-              if (a) {
-                return `${a} ${b}`;
-              }
-              return ` ${b}`;
-            }
-            return a;
-          }, '')}/>`}/>
+          <${Code} block snippet=${viewCheckboxSource(state)}/>
         <//>
       <//>
       ${inputTypes.map((type) => html`
         <${Specimen} name=${type}>
           <${Grid} columns=2>
             <${Input} placeholder=${type} type=${type}/>
-            <${Code} block snippet=${viewSource(type)}/>
+            <${Code} block snippet=${viewInputSource(type)}/>
           <//>
         <//>
       `)}

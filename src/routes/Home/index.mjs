@@ -3,11 +3,9 @@ import Status, { kindsOfStatus } from '../../Status/index.mjs';
 import Card from '../../Card/index.mjs';
 import Grid from '../../Grid/index.mjs';
 import Panel from '../../Panel/index.mjs';
-import Scrollable from '../../Scrollable/index.mjs';
 import Typography from '../../Typography/index.mjs';
 
 import { html } from 'htm/preact';
-import stylish from 'stylish-preact';
 
 export const HomeRoute = () => html`
   <${Typography} kind="h4">🌌 Twuni UI<//>

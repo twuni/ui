@@ -61,8 +61,10 @@ const Mark = stylish('span', ({ checked, theme }) => `
   ${theme.transition('opacity')}
 `);
 
+const KEY_CODE_ENTER = 13;
+
 const intercept = (callback) => (event) => {
-  if (typeof event.keyCode === 'number' && event.keyCode !== 13) {
+  if (typeof event.keyCode === 'number' && event.keyCode !== KEY_CODE_ENTER) {
     return;
   }
   event.preventDefault();
