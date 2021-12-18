@@ -1,6 +1,6 @@
 import Card from '../../Card/index.mjs';
 import Grid from '../../Grid/index.mjs';
-import List from '../../List/index.mjs';
+import List from '@twuni/ui-list';
 import Panel from '../../Panel/index.mjs';
 import Typography from '../../Typography/index.mjs';
 
@@ -56,7 +56,7 @@ export const HomeRoute = () => html`
       />
     <//>
     <${Card} style="align-items:stretch;overflow:hidden;display:flex;flex-direction:column;">
-      <${Typography} kind="h5" title="Experimental">Virtualized Lists 🧬<//>
+      <${Typography} kind="h5" title="Experimental">Virtualized Lists<//>
       <${Typography} kind="body" style="opacity:0.6">High-performance list views, right out of the box. Minimal and optimized.<//>
       <${List} count=${TwinPeaksCast.length} renderItem=${(index) => html`
         <${Item}>
