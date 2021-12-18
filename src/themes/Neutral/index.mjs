@@ -39,7 +39,8 @@ export const Theme = Object.freeze({
   shadow: {
     heavy: '4px 4px 4px rgba(0, 0, 0, 0.25)',
     soft: '2px 2px 2px rgba(0, 0, 0, 0.25)',
-    subtle: '1px 1px 1px rgba(0, 0, 0, 0.25)'
+    subtle: '1px 1px 1px rgba(0, 0, 0, 0.25)',
+    text: '1px 1px 0 rgba(0, 0, 0, 0.25)'
   },
   spacing: Object.assign(spacing, {
     /* eslint-disable no-magic-numbers, sort-keys */
@@ -53,7 +54,7 @@ export const Theme = Object.freeze({
     /* eslint-enable no-magic-numbers, sort-keys */
   }),
   transition: (...properties) => `
-    transition-duration: 100ms;
+    transition-duration: 200ms;
     transition-property: ${properties.join(', ')};
     transition-timing-function: ease-in-out;
   `,
