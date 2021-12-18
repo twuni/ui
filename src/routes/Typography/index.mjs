@@ -4,12 +4,14 @@ import Code from '../../Code/index.mjs';
 import Grid from '../../Grid/index.mjs';
 import Scrollable from '../../Scrollable/index.mjs';
 import Specimen from '../../Specimen/index.mjs';
+import Title from '../../Title/index.mjs';
 
 import { html } from 'htm/preact';
 
 const viewSource = (kind) => `<Typography kind=${JSON.stringify(kind)}>...</Typography>`;
 
 export const TypographyRoute = () => html`
+  <${Title} text="Typography | Twuni UI"/>
   <${Scrollable}>
     ${kindsOfTypography.map((kind) => html`
       <${Specimen} name=${kind}>

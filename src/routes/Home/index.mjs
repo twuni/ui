@@ -3,11 +3,13 @@ import Status, { kindsOfStatus } from '../../Status/index.mjs';
 import Card from '../../Card/index.mjs';
 import Grid from '../../Grid/index.mjs';
 import Panel from '../../Panel/index.mjs';
+import Title from '../../Title/index.mjs';
 import Typography from '../../Typography/index.mjs';
 
 import { html } from 'htm/preact';
 
 export const HomeRoute = () => html`
+  <${Title} text="Twuni UI"/>
   <${Typography} kind="h4">🌌 Twuni UI<//>
   <${Grid} columns=2 style="flex:1;overflow-x:hidden;overflow-y:auto;">
     <${Card}>

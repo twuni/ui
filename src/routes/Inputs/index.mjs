@@ -5,6 +5,7 @@ import Code from '../../Code/index.mjs';
 import Grid from '../../Grid/index.mjs';
 import Scrollable from '../../Scrollable/index.mjs';
 import Specimen from '../../Specimen/index.mjs';
+import Title from '../../Title/index.mjs';
 
 import { html } from 'htm/preact';
 import { useReducer } from 'preact/hooks';
@@ -47,6 +48,7 @@ export const InputsRoute = () => {
   };
 
   return html`
+    <${Title} text="Inputs | Twuni UI"/>
     <${Scrollable}>
       <${Specimen} name="checkbox">
         <${Grid} columns=2>
