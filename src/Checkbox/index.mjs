@@ -8,7 +8,7 @@ const StylishCheckbox = stylish('span', [
     border-color: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     border-style: solid;
-    border-width: 0;
+    border-width: ${theme.spacing.xs};
     box-sizing: border-box;
     cursor: pointer;
     display: flex;
@@ -39,7 +39,9 @@ const StylishCheckbox = stylish('span', [
     }
   },
   {
-    rule: 'border-width: 1px;',
+    rule: ({ theme }) => `
+      border-color: ${theme.palette.primary};
+    `,
     states: [':focus']
   },
   {
@@ -75,7 +77,7 @@ export const Checkbox = ({ checked = false, indeterminate = false, onChange, ...
   const onClick = intercept(onChange);
   return html`
     <${StylishCheckbox} ...${otherProps} aria-checked=${checked} onClick=${onClick} onKeyDown=${onClick} role="checkbox" tabindex=0>
-      ${indeterminate ? '―' : html`<${Mark} checked=${checked}>✔<//>`}
+      ${indeterminate || html`<${Mark} checked=${checked}>✔<//>`}
     <//>
   `;
 };

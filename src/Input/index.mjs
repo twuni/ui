@@ -1,7 +1,6 @@
 import stylish from 'stylish-preact';
 
 export const inputTypes = Object.freeze([
-  'color',
   'date',
   'datetime-local',
   'email',
