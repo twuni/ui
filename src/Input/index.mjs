@@ -50,6 +50,12 @@ export const Input = stylish('input', [
   {
     rule: 'background-color: rgba(0, 0, 0, 0.15)',
     states: [':active:focus:hover']
+  },
+  {
+    rule: ({ theme }) => `
+      border-color: ${theme.palette.error};
+    `,
+    states: [':invalid', ':invalid:focus']
   }
 ]);
 

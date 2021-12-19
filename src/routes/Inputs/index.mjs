@@ -82,7 +82,7 @@ export const InputsRoute = () => {
       ${inputTypes.map((type) => html`
         <${Specimen} name=${type}>
           <${Grid} columns=2>
-            <${Input} placeholder=${type} type=${type}/>
+            <${Input} placeholder=${`Enter ${type}…`} type=${type}/>
             <${Code} block snippet=${viewInputSource(type)}/>
           <//>
         <//>
