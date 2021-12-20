@@ -18,13 +18,11 @@ const Drawer = stylish('aside', ({ open = false, size, theme }) => `
   ${theme.transition('margin')}
 `);
 
-export const DrawerLayout = ({ content, drawer, drawerSize = '320px' }) => {
-  return html`
-    <${Layout}>
-      <${Drawer} open=${Boolean(drawer)} size=${drawerSize}>${drawer}<//>
-      <${Layout}>${content}<//>
-    <//>
-  `;
-};
+export const DrawerLayout = ({ content, drawer, drawerSize = '320px' }) => html`
+  <${Layout}>
+    <${Drawer} open=${Boolean(drawer)} size=${drawerSize}>${drawer}<//>
+    <${Layout}>${content}<//>
+  <//>
+`;
 
 export default DrawerLayout;

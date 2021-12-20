@@ -1,7 +1,7 @@
 import stylish from 'stylish-preact';
 
 export const Navigation = stylish('nav', [
-  ({ theme }) => `
+  `
     align-items: stretch;
     display: flex;
     flex-direction: row;
