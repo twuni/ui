@@ -3,7 +3,7 @@ import stylish from 'stylish-preact';
 
 const transparent = 'rgba(0, 0, 0, 0)';
 
-const applyKind = Object.freeze([
+const Kind = Object.freeze([
   ['error', 'onError'],
   ['info', 'onInfo'],
   ['neutral', 'onNeutral'],
@@ -12,27 +12,39 @@ const applyKind = Object.freeze([
   ['success', 'onSuccess'],
   ['warning', 'onWarning']
 ].reduce((a, [background, foreground]) => Object.assign(a, {
-  [background]: ({ theme }) => `
-    background-color: ${transparent};
-    border-color: ${transparent};
-    color: ${theme.palette[background]};
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
-  `,
-  [`${background}Outline`]: ({ theme }) => `
-    background-color: ${transparent};
-    border-color: ${theme.palette[background]};
-    color: ${theme.palette[background]};
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
-  `,
-  [`${background}Solid`]: ({ theme }) => `
-    background-color: ${theme.palette[background]};
-    border-color: ${transparent};
-    color: ${theme.palette[foreground]};
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-  `
+  [background]: {
+    background,
+    foreground,
+    rule: ({ theme }) => `
+      background-color: ${transparent};
+      border-color: ${transparent};
+      color: ${theme.palette[background]};
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+    `
+  },
+  [`${background}Outline`]: {
+    background,
+    foreground,
+    rule: ({ theme }) => `
+      background-color: ${transparent};
+      border-color: ${theme.palette[background]};
+      color: ${theme.palette[background]};
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+    `
+  },
+  [`${background}Solid`]: {
+    background,
+    foreground,
+    rule: ({ theme }) => `
+      background-color: ${theme.palette[background]};
+      border-color: ${theme.palette[background]};
+      color: ${theme.palette[foreground]};
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    `
+  }
 }), {}));
 
-export const kindsOfButtons = Object.freeze(Object.keys(applyKind));
+export const kindsOfButtons = Object.freeze(Object.keys(Kind));
 
 const Frame = stylish('button', [
   ({ kind = 'primary', theme }) => `
@@ -41,6 +53,7 @@ const Frame = stylish('button', [
     border-radius: ${theme.spacing.sm};
     border-style: solid;
     border-width: 1px;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     box-sizing: border-box;
     cursor: pointer;
     display: flex;
@@ -53,8 +66,8 @@ const Frame = stylish('button', [
     padding: 0;
     user-select: none;
     ${theme.typography.button};
-    ${applyKind[kind]({ theme })}
-    ${theme.transition('filter', 'opacity')}
+    ${theme.transition('box-shadow', 'filter', 'opacity')}
+    ${Kind[kind].rule({ theme })}
   `,
   {
     rule: `
@@ -65,8 +78,16 @@ const Frame = stylish('button', [
     states: [':disabled']
   },
   {
+    rule: ({ kind = 'primary', theme }) => `
+      border-color: ${theme.palette[Kind[kind].background]};
+      border-style: dotted;
+      box-shadow: 0 0 ${theme.spacing.md} ${theme.palette[Kind[kind].background]};
+    `,
+    states: [':focus']
+  },
+  {
     rule: 'background-color: rgba(0, 0, 0, 0.05)',
-    states: [':active > span', ':focus > span', ':hover > span']
+    states: [':active > span', ':hover > span']
   },
   {
     rule: 'background-color: rgba(0, 0, 0, 0.1)',
@@ -78,23 +99,22 @@ const Frame = stylish('button', [
   }
 ]);
 
-const Shadow = stylish('span', [
-  ({ theme }) => `
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0);
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    justify-content: center;
-    line-height: ${theme.spacing.touch};
-    margin: 0;
-    overflow: hidden;
-    padding: 0 ${theme.spacing.md};
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    ${theme.transition('background-color')}
-  `
-]);
+const Shadow = stylish('span', ({ theme }) => `
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: ${theme.spacing.sm};
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  line-height: ${theme.spacing.touch};
+  margin: 0;
+  overflow: hidden;
+  padding: 0 ${theme.spacing.md};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  ${theme.transition('background-color')}
+`);
 
 export const Button = (props) => {
   const childProps = { ...props };

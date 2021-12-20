@@ -47,6 +47,7 @@ export const App = () => html`
       <${Navigation}>
         <${NavigationLink} to="/"><${HamburgerIcon}/><//>
         <${NavigationLink} to="/buttons">Buttons<//>
+        <${NavigationLink} to="/drawer">Drawer<//>
         <${NavigationLink} to="/inputs">Inputs<//>
         <${NavigationLink} to="/lists">Lists<//>
         <${NavigationLink} to="/typography">Typography<//>

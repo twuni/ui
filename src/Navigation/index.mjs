@@ -5,9 +5,10 @@ export const Navigation = stylish('nav', [
     align-items: stretch;
     display: flex;
     flex-direction: row;
-    margin-bottom: ${theme.spacing.md};
+    margin: 0;
     overflow-x: auto;
     overflow-y: hidden;
+    padding: 0;
   `,
   {
     media: '(prefers-color-scheme: light)',
