@@ -1,7 +1,7 @@
 import HamburgerIcon from '../icons/Hamburger/index.mjs';
 import Navigation from '../Navigation/index.mjs';
 import NavigationLink from '../NavigationLink/index.mjs';
-import Panel from '../Panel/index.mjs';
+import Panel from '@twuni/ui-panel';
 import Routes from '../routes/index.mjs';
 
 import { html } from 'htm/preact';

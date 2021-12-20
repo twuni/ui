@@ -1,12 +1,12 @@
-import Input, { inputTypes } from '../../Input/index.mjs';
+import Input, { inputTypes } from '@twuni/ui-input';
 
-import Checkbox from '../../Checkbox/index.mjs';
-import Code from '../../Code/index.mjs';
-import ColorInput from '../../ColorInput/index.mjs';
-import Grid from '../../Grid/index.mjs';
-import Scrollable from '../../Scrollable/index.mjs';
+import Checkbox from '@twuni/ui-checkbox';
+import Code from '@twuni/ui-code';
+import ColorInput from '@twuni/ui-swatch';
+import Grid from '@twuni/ui-grid';
+import Scrollable from '@twuni/ui-scrollable';
 import Specimen from '../../Specimen/index.mjs';
-import Title from '../../Title/index.mjs';
+import Title from '@twuni/ui-title';
 
 import { html } from 'htm/preact';
 import { useReducer } from 'preact/hooks';

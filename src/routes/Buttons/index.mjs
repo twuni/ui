@@ -1,10 +1,10 @@
-import Button, { kindsOfButtons } from '../../Button/index.mjs';
+import Button, { kindsOfButtons } from '@twuni/ui-button';
 
-import Code from '../../Code/index.mjs';
-import Grid from '../../Grid/index.mjs';
-import Scrollable from '../../Scrollable/index.mjs';
+import Code from '@twuni/ui-code';
+import Grid from '@twuni/ui-grid';
+import Scrollable from '@twuni/ui-scrollable';
 import Specimen from '../../Specimen/index.mjs';
-import Title from '../../Title/index.mjs';
+import Title from '@twuni/ui-title';
 
 import { html } from 'htm/preact';
 

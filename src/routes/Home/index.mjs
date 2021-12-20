@@ -1,12 +1,12 @@
-import Pill, { kindsOfPill } from '../../Pill/index.mjs';
-import Status, { kindsOfStatus } from '../../Status/index.mjs';
+import Pill, { kindsOfPill } from '@twuni/ui-pill';
+import Status, { kindsOfStatus } from '@twuni/ui-status';
 
-import Card from '../../Card/index.mjs';
-import Grid from '../../Grid/index.mjs';
-import Panel from '../../Panel/index.mjs';
-import Scrollable from '../../Scrollable/index.mjs';
-import Title from '../../Title/index.mjs';
-import Typography from '../../Typography/index.mjs';
+import Card from '@twuni/ui-card';
+import Grid from '@twuni/ui-grid';
+import Panel from '@twuni/ui-panel';
+import Scrollable from '@twuni/ui-scrollable';
+import Title from '@twuni/ui-title';
+import Typography from '@twuni/ui-typography';
 
 import { html } from 'htm/preact';
 

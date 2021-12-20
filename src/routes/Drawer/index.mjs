@@ -1,7 +1,7 @@
-import ActionCard from '../../ActionCard/index.mjs';
-import Button from '../../Button/index.mjs';
-import DrawerLayout from '../../DrawerLayout/index.mjs';
-import Title from '../../Title/index.mjs';
+import ActionCard from '@twuni/ui-action-card';
+import Button from '@twuni/ui-button';
+import DrawerLayout from '@twuni/ui-drawer';
+import Title from '@twuni/ui-title';
 
 import { html } from 'htm/preact';
 import { useState } from 'preact/hooks';
